@@ -35,13 +35,32 @@ class Game:
         colCnt = self._grid.getColumnCount()
         insertColumn = int(input(f"Enter column b/w 0 and {colCnt - 1} to insert the piece\t"))
         insertRow = self._grid.placePiece(insertColumn, player.getPieceColor())
+        if insertRow == "GridFull":
+            return "GridFull"
+        elif insertRow == "ColumnFull":
+            return "ColumnFull"
 
         return insertRow, insertColumn
 
     def playRound(self):
+
+        def makeMove(player):
+            data = self.playMove(player)
+            if data == "GridFull":
+                return "No-one"
+            elif data == "ColumnFull":
+                print("Caution! The column is full.Can't put more pieces there.")
+                return makeMove(player)
+            r, c = data
+            return r, c
+
         while True:
             for player in self._players:
-                row, col = self.playMove(player)
+
+                info = makeMove(player)
+                if info == "No-one":
+                    return "No-one"
+                row, col = info
                 # check if player wom by adding a piece
                 pieceColor = player.getPieceColor()
 
@@ -54,8 +73,13 @@ class Game:
         winner = None
         while maxScore < self._targetScore:
             winner = self.playRound()
-            print(f"{winner.getName()} won the round.")
-            maxScore = max(self._score[winner.getName()], maxScore)
+            if winner == "No-one":
+                print("The Game has been drawn! Moving to the next round.")
+
+            else:
+
+                print(f"{winner.getName()} won the round.")
+                maxScore = max(self._score[winner.getName()], maxScore)
 
             # reset the grid
             self._grid.initGrid()
@@ -66,7 +90,7 @@ class Game:
 
 
 # create a grid
-grid = Grid(4, 4)
+grid = Grid(3, 3)
 # create a game with that grid
 game = Game(grid, 4, 2)
 # start the game

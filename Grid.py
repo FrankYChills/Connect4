@@ -40,9 +40,11 @@ class Grid:
             if row == 0:
                 for c in self._grid[0]:
                     if c == GridPosition.EMPTY:
-                        break
-                raise Exception("Woops! The Game ended! cause all grids were full")
-        raise UserWarning("That column got full!! Please Play carefully!!")
+                        print("returning columnfull")
+                        return "ColumnFull"
+
+                print("returning gridfull")
+                return "GridFull"
 
     def checkNConnected(self, connectN, row, col, piece):
         count = 0
