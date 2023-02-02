@@ -66,7 +66,7 @@ class Game:
 
 
 # create a grid
-grid = Grid(3, 3)
+grid = Grid(4, 4)
 # create a game with that grid
 game = Game(grid, 4, 2)
 # start the game
